@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "C:\Users\niyas\OneDrive\Desktop\Project-2026\verify_system.py", line 57, in <module>
+    verify()
+    ~~~~~~^^
+  File "C:\Users\niyas\OneDrive\Desktop\Project-2026\verify_system.py", line 37, in verify
+    response = complaint_data(request)
+  File "C:\Users\niyas\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 56, in _view_wrapper
+    test_pass = test_func(request.user)
+                          ^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'user'
