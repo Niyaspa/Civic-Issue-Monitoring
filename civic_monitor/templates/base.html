@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CivicMonitor{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#0d1117',
+                            surface: '#161b22',
+                            elevated: '#1c2128',
+                            border: 'rgba(255,255,255,0.08)',
+                        },
+                        brand: '#4f8ef7',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 40px rgba(79,142,247,0.15)',
+                        'glow-sm': '0 0 20px rgba(79,142,247,0.1)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <style>
+        * { font-family: 'Outfit', sans-serif; }
+        body { background: #0d1117; color: #e6edf3; }
+
+        .glass {
+            background: rgba(22, 27, 34, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .glow-border {
+            border: 1px solid rgba(79,142,247,0.3);
+            box-shadow: 0 0 30px rgba(79,142,247,0.08);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #4f8ef7, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        input, textarea, select {
+            background: rgba(255,255,255,0.04) !important;
+            border: 1px solid rgba(255,255,255,0.1) !important;
+            color: #e6edf3 !important;
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none !important;
+            border-color: rgba(79,142,247,0.5) !important;
+            box-shadow: 0 0 0 3px rgba(79,142,247,0.15) !important;
+            background: rgba(79,142,247,0.04) !important;
+        }
+        input::placeholder, textarea::placeholder { color: #484f58; }
+
+        select option {
+            background: #1c2128;
+            color: #e6edf3;
+        }
+
+        .nav-link {
+            color: #8b949e;
+            font-weight: 500;
+            font-size: 14px;
+            transition: color 0.2s;
+            position: relative;
+        }
+        .nav-link:hover { color: #e6edf3; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0d1117; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="glass sticky top-0 z-50" style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center shadow-glow-sm">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <span class="text-white font-bold text-lg tracking-tight">Civic<span class="gradient-text">Monitor</span></span>
+            </a>
+
+            <!-- Nav Links -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'submit_complaint' %}" class="nav-link">Report Issue</a>
+                {% if user.is_authenticated %}
+                    {% if user.officialprofile %}
+                        <a href="{% url 'dashboard_home' %}" class="nav-link">Official Dashboard</a>
+                        {% if 'Disaster' in user.officialprofile.department.name or 'KSDMA' in user.officialprofile.department.name %}
+                        <a href="{% url 'volunteer_management' %}" class="nav-link" style="color: #f85149;">🚨 Volunteers</a>
+                        {% endif %}
+                    {% elif user.volunteerprofile %}
+                        <a href="{% url 'volunteer_dashboard' %}" class="nav-link" style="color: #f85149;">🚨 My Assignments</a>
+                    {% else %}
+                        <a href="{% url 'citizen_dashboard' %}" class="nav-link">My Reports</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'volunteer_register' %}" class="nav-link">Volunteer</a>
+                {% endif %}
+            </div>
+
+            <!-- Auth Area -->
+            <div class="hidden md:flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                    <div class="flex items-center space-x-2 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full">
+                        <div class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                        <span class="text-sm font-medium text-slate-300">{{ user.username }}</span>
+                        <span class="text-xs text-slate-500">
+                            {% if user.officialprofile %}· {{ user.officialprofile.department.name }}{% elif user.volunteerprofile %}· Volunteer{% else %}· Citizen{% endif %}
+                        </span>
+                    </div>
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="text-sm text-slate-500 hover:text-red-400 transition font-medium">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Sign In</a>
+                    <a href="{% url 'submit_complaint' %}" class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold text-white transition transform hover:scale-105 active:scale-95" style="background: linear-gradient(135deg, #4f8ef7, #7c5df7); box-shadow: 0 4px 20px rgba(79,142,247,0.3);">
+                        Report Now
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="background: #0a0d13; border-top: 1px solid rgba(255,255,255,0.05);" class="py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-2">
+                <div class="w-6 h-6 rounded-md bg-gradient-to-br from-blue-500 to-violet-600 flex items-center justify-center">
+                    <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <span class="text-slate-400 text-sm font-semibold">CivicMonitor</span>
+            </div>
+            <p class="text-slate-600 text-sm">&copy; 2026 Civic Issue Monitoring System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+
+</html>
