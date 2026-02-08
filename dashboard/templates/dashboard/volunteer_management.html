@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex" style="min-height: calc(100vh - 73px);">
+    <!-- Sidebar -->
+    <aside class="w-60 hidden md:flex flex-col shrink-0" style="background: #161b22; border-right: 1px solid rgba(255,255,255,0.06);">
+        <div class="p-5">
+            <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-700 mb-4 mt-2">Navigation</p>
+            <ul class="space-y-1">
+                <li>
+                    <a href="{% url 'dashboard_home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'complaint_list' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-white hover:bg-white/5 transition">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        All Complaints
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'volunteer_management' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold" style="background: rgba(248,81,73,0.1); color: #f85149; border: 1px solid rgba(248,81,73,0.15);">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        Volunteers
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <div class="flex-1 p-8 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-10">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold mb-4" style="background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.2); color: #f85149;">
+                    🚨 Disaster Management · Volunteer Command
+                </div>
+                <h1 class="text-3xl font-black text-white">Volunteer Management</h1>
+                <p class="text-slate-500 text-sm mt-1">Assign disaster tasks to available volunteers and track progress.</p>
+            </div>
+
+            {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                <div class="p-4 rounded-2xl text-sm font-semibold
+                    {% if message.tags == 'error' %}text-red-400{% else %}text-emerald-400{% endif %}"
+                    style="{% if message.tags == 'error' %}background: rgba(248,81,73,0.08); border: 1px solid rgba(248,81,73,0.2);
+                    {% else %}background: rgba(35,134,54,0.08); border: 1px solid rgba(35,134,54,0.2);{% endif %}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <!-- Left: Assign Task -->
+                <div class="xl:col-span-1">
+                    <div class="rounded-3xl p-6 sticky top-24" style="background: #161b22; border: 1px solid rgba(255,255,255,0.06);">
+                        <h2 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            Assign a Task
+                        </h2>
+                        <p class="text-slate-600 text-xs mb-6">Select a volunteer and a disaster complaint to create an assignment.</p>
+                        <form method="POST" class="space-y-4">
+                            {% csrf_token %}
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Volunteer</label>
+                                <select name="volunteer_id" required>
+                                    <option value="">-- Select Volunteer --</option>
+                                    {% for v in volunteers %}
+                                    <option value="{{ v.pk }}" {% if not v.is_available %}disabled{% endif %}>
+                                        {{ v.name }} {% if not v.is_available %}(Unavailable){% else %}✓ Available{% endif %}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Disaster Complaint</label>
+                                <select name="complaint_id" required>
+                                    <option value="">-- Select Complaint --</option>
+                                    {% for c in disaster_complaints %}
+                                    <option value="{{ c.pk }}">#{{ c.pk }} — {{ c.location }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Instructions (Optional)</label>
+                                <textarea name="notes" rows="3" placeholder='e.g. "Bring 2 boats to sector 3C and evacuate residents near the river."' style="resize: none;"></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3.5 rounded-2xl text-sm font-bold text-white transition transform hover:scale-[1.02] active:scale-95" style="background: linear-gradient(135deg, #f85149, #d73a49); box-shadow: 0 6px 24px rgba(248,81,73,0.3);">
+                                Assign Task →
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Right: Volunteers & Assignments -->
+                <div class="xl:col-span-2 space-y-8">
+                    <!-- Volunteer Cards -->
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            Registered Volunteers <span class="text-slate-600 font-normal text-base">({{ volunteers.count }})</span>
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            {% for v in volunteers %}
+                            <div class="rounded-2xl p-5 transition hover:border-white/10" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div>
+                                        <h3 class="font-bold text-white">{{ v.name }}</h3>
+                                        <p class="text-slate-600 text-xs">📍 {{ v.area }}</p>
+                                        <p class="text-slate-600 text-xs">📞 {{ v.phone }}</p>
+                                    </div>
+                                    <span class="px-2.5 py-1 rounded-lg text-[11px] font-bold uppercase
+                                        {% if v.is_available %}text-emerald-400{% else %}text-slate-500{% endif %}"
+                                        style="{% if v.is_available %}background: rgba(35,134,54,0.1); border: 1px solid rgba(35,134,54,0.2);
+                                        {% else %}background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);{% endif %}">
+                                        {% if v.is_available %}Available{% else %}Unavailable{% endif %}
+                                    </span>
+                                </div>
+                                {% if v.resources.all %}
+                                <div class="space-y-1 pt-3" style="border-top: 1px solid rgba(255,255,255,0.05);">
+                                    <p class="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-2">Resources</p>
+                                    {% for r in v.resources.all %}
+                                    <div class="flex items-center justify-between text-xs">
+                                        <span class="text-slate-500">{{ r.get_resource_type_display }}</span>
+                                        <span class="text-slate-300 font-semibold">{{ r.description }} (×{{ r.quantity }})</span>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="text-xs text-slate-700 italic pt-2" style="border-top: 1px solid rgba(255,255,255,0.05);">No resources reported.</p>
+                                {% endif %}
+                            </div>
+                            {% empty %}
+                            <div class="col-span-2 p-12 text-center rounded-2xl" style="border: 2px dashed rgba(255,255,255,0.05);">
+                                <p class="text-slate-600 font-bold">No volunteers registered yet.</p>
+                                <a href="{% url 'volunteer_register' %}" class="text-red-400 hover:text-red-300 text-sm mt-2 inline-block transition">Share registration link →</a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Recent Assignments -->
+                    <div>
+                        <h2 class="text-xl font-bold text-white mb-5 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            Recent Assignments
+                        </h2>
+                        <div class="rounded-3xl overflow-hidden" style="background: #161b22; border: 1px solid rgba(255,255,255,0.06);">
+                            <table class="w-full text-left">
+                                <thead style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                                    <tr>
+                                        <th class="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-600">Volunteer</th>
+                                        <th class="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-600">Complaint</th>
+                                        <th class="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-600">Status</th>
+                                        <th class="px-5 py-4 text-[10px] font-black uppercase tracking-widest text-slate-600">Assigned</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for a in existing_assignments %}
+                                    <tr class="border-t transition hover:bg-white/[0.02]" style="border-color: rgba(255,255,255,0.04);">
+                                        <td class="px-5 py-4 text-sm font-semibold text-white">{{ a.volunteer.name }}</td>
+                                        <td class="px-5 py-4 text-sm text-slate-400">#{{ a.complaint.id }} — {{ a.complaint.location|truncatechars:30 }}</td>
+                                        <td class="px-5 py-4">
+                                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase
+                                                {% if a.status == 'COMPLETED' %}text-emerald-400
+                                                {% elif a.status == 'IN_PROGRESS' or a.status == 'ACCEPTED' %}text-blue-400
+                                                {% elif a.status == 'DECLINED' %}text-red-400
+                                                {% else %}text-amber-400{% endif %}"
+                                                style="{% if a.status == 'COMPLETED' %}background: rgba(35,134,54,0.1); border: 1px solid rgba(35,134,54,0.2);
+                                                {% elif a.status == 'IN_PROGRESS' or a.status == 'ACCEPTED' %}background: rgba(79,142,247,0.1); border: 1px solid rgba(79,142,247,0.2);
+                                                {% elif a.status == 'DECLINED' %}background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.2);
+                                                {% else %}background: rgba(210,153,34,0.1); border: 1px solid rgba(210,153,34,0.2);{% endif %}">
+                                                {{ a.get_status_display }}
+                                            </span>
+                                        </td>
+                                        <td class="px-5 py-4 text-xs text-slate-700 font-mono">{{ a.assigned_at|date:"M d, Y" }}</td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr><td colspan="4" class="px-5 py-12 text-center text-slate-600 italic text-sm">No assignments made yet.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
