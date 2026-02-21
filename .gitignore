@@ -1,0 +1,9 @@
+venv/
+.venv
+.env
+db.sqlite3
+ml_engine/models.pkl
+ml_engine/__pycache__/
+ml_engine/ml_engine/__pycache__/
+citizen/__pycache__
+*/__pycache__
