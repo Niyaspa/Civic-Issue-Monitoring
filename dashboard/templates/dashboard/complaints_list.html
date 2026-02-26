@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex" style="min-height: calc(100vh - 73px);">
+    <!-- Sidebar -->
+    <aside class="w-64 hidden md:flex flex-col shrink-0" style="background: #161b22; border-right: 1px solid rgba(255,255,255,0.06);">
+        <div class="p-6">
+            <p class="text-xs font-bold uppercase tracking-[0.15em] text-slate-600 mb-4">Navigation</p>
+            <ul class="space-y-1">
+                <li>
+                    <a href="{% url 'dashboard_home' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition font-medium text-sm">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                        Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'complaint_list' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm" style="background: rgba(79,142,247,0.12); color: #4f8ef7;">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                        All Complaints
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'leaderboard' %}" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition font-medium text-sm">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        Leaderboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 p-8 overflow-y-auto">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <div>
+                    <h1 class="text-3xl font-black text-white">Manage Complaints</h1>
+                    <p class="text-slate-500 text-sm mt-1">Your department's incoming reports</p>
+                </div>
+                <div class="px-4 py-2 rounded-xl text-sm font-bold text-slate-400" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+                    Total: {{ complaints.count }}
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <form method="GET" class="mb-6 flex flex-wrap gap-4 items-end p-4 rounded-2xl" style="background: #161b22; border: 1px solid rgba(255,255,255,0.06);">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Category</label>
+                    <select name="category" class="rounded-xl border-gray-700 bg-gray-800 text-slate-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="ALL">All Categories</option>
+                        <option value="DISASTER" {% if request.GET.category == 'DISASTER' %}selected{% endif %}>Disaster</option>
+                        <option value="ROAD" {% if request.GET.category == 'ROAD' %}selected{% endif %}>Road</option>
+                        <option value="SOCIAL" {% if request.GET.category == 'SOCIAL' %}selected{% endif %}>Social</option>
+                        <option value="OTHER" {% if request.GET.category == 'OTHER' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Status</label>
+                    <select name="status" class="rounded-xl border-gray-700 bg-gray-800 text-slate-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="ALL">All Statuses</option>
+                        <option value="PENDING" {% if request.GET.status == 'PENDING' %}selected{% endif %}>Pending</option>
+                        <option value="IN_PROGRESS" {% if request.GET.status == 'IN_PROGRESS' %}selected{% endif %}>In Progress</option>
+                        <option value="RESOLVED" {% if request.GET.status == 'RESOLVED' %}selected{% endif %}>Resolved</option>
+                    </select>
+                </div>
+                {% if request.user.is_superuser %}
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Department</label>
+                    <select name="department" class="rounded-xl border-gray-700 bg-gray-800 text-slate-200 text-sm focus:ring-blue-500 focus:border-blue-500 max-w-[200px] truncate">
+                        <option value="ALL">All Departments</option>
+                        {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if request.GET.department == dept.id|stringformat:"s" %}selected{% endif %}>{{ dept.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Date Sort</label>
+                    <select name="date" class="rounded-xl border-gray-700 bg-gray-800 text-slate-200 text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="desc" {% if request.GET.date == 'desc' %}selected{% endif %}>Newest First</option>
+                        <option value="asc" {% if request.GET.date == 'asc' %}selected{% endif %}>Oldest First</option>
+                    </select>
+                </div>
+                <div>
+                    <button type="submit" class="px-5 py-2 rounded-xl text-sm font-bold text-white transition hover:bg-blue-600" style="background: #4f8ef7;">
+                        Filter
+                    </button>
+                    <a href="{% url 'complaint_list' %}" class="ml-2 px-4 py-2 rounded-xl text-sm font-bold text-slate-400 transition hover:text-white" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
+                        Clear
+                    </a>
+                </div>
+            </form>
+
+            <div class="rounded-3xl overflow-hidden" style="background: #161b22; border: 1px solid rgba(255,255,255,0.06);">
+                <table class="w-full text-left">
+                    <thead style="border-bottom: 1px solid rgba(255,255,255,0.06);">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">ID</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Category</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Description</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Location</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Date</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Status</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600">Resolved Time</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-slate-600"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for complaint in complaints %}
+                        <tr class="transition hover:bg-white/[0.02]" style="border-bottom: 1px solid rgba(255,255,255,0.04);">
+                            <td class="px-6 py-4 font-mono text-xs text-slate-600">#{{ complaint.id }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-tight
+                                    {% if complaint.category == 'DISASTER' %}text-red-400
+                                    {% elif complaint.category == 'ROAD' %}text-orange-400
+                                    {% elif complaint.category == 'SOCIAL' %}text-sky-400
+                                    {% else %}text-slate-400{% endif %}"
+                                    style="
+                                    {% if complaint.category == 'DISASTER' %}background: rgba(248,81,73,0.1); border: 1px solid rgba(248,81,73,0.2);
+                                    {% elif complaint.category == 'ROAD' %}background: rgba(249,115,22,0.1); border: 1px solid rgba(249,115,22,0.2);
+                                    {% elif complaint.category == 'SOCIAL' %}background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.2);
+                                    {% else %}background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);{% endif %}">
+                                    {{ complaint.get_category_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-slate-400 truncate max-w-xs">{{ complaint.description }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-400">{{ complaint.location }}</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 font-mono text-xs">{{ complaint.created_at|date:"M d, Y" }}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold uppercase tracking-tight
+                                    {% if complaint.status == 'RESOLVED' %}text-emerald-400{% else %}text-amber-400{% endif %}"
+                                    style="{% if complaint.status == 'RESOLVED' %}background: rgba(35,134,54,0.1); border: 1px solid rgba(35,134,54,0.2);
+                                    {% else %}background: rgba(210,153,34,0.1); border: 1px solid rgba(210,153,34,0.2);{% endif %}">
+                                    {{ complaint.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-emerald-400 font-mono text-xs">
+                                {% if complaint.status == 'RESOLVED' and complaint.resolution_time_str %}
+                                    {{ complaint.resolution_time_str }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{% url 'complaint_detail' complaint.id %}" class="text-xs font-bold px-3 py-1.5 rounded-lg text-slate-300 hover:text-white transition" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);">
+                                    View →
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" class="px-6 py-16 text-center text-slate-600 italic text-sm">No complaints assigned to your department.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
