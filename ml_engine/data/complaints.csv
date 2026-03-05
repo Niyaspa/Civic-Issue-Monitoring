@@ -1,0 +1,159 @@
+text,category
+Flood water entering houses in low lying areas,DISASTER
+Heavy rain caused landslide near hill road,DISASTER
+Earthquake tremors felt building cracks observed,DISASTER
+Cyclone warning issued need shelter,DISASTER
+River overflowing due to heavy rains,DISASTER
+Tsunami alert issued for coastal areas,DISASTER
+Forest fire spreading rapidly near village,DISASTER
+Drought situation no water for crops,DISASTER
+Heat wave causing health issues,DISASTER
+Snow avalanche blocked mountain pass,DISASTER
+Hurricane winds damaged roof,DISASTER
+Mudslide blocked access road,DISASTER
+River banks eroding houses at risk,DISASTER
+Heavy snowfall blocked all roads,DISASTER
+Landslide blocked railway track,DISASTER
+Cyclone destroyed fishing boats,DISASTER
+Earthquake cracks in school building,DISASTER
+Flash flood warning issued,DISASTER
+Glacial lake outburst flood risk,DISASTER
+Forest fire smoke causing breathing issues,DISASTER
+Heat wave resulted in heat stroke cases,DISASTER
+Drought no drinking water in village,DISASTER
+Sea level rise flooding coastal homes,DISASTER
+Tornado warning take shelter,DISASTER
+Hailstorm damaged crops extensively,DISASTER
+Volcanic ash cloud disrupting flights,DISASTER
+Lightning strike caused fire in farm,DISASTER
+Sandstorm reduced visibility zero,DISASTER
+Avalanche warning for skiers,DISASTER
+River flooding agricultural land,DISASTER
+Ground sinking due to heavy rain,DISASTER
+Bridge washed away by flood water,DISASTER
+Dam water level rising critically,DISASTER
+Cloud burst caused flash flood,DISASTER
+Storm surge flooded beach resorts,DISASTER
+Wildfire threatening residential area,DISASTER
+Heavy rain caused roof collapse,DISASTER
+My house is flooded due to rain,DISASTER
+Water entered my home from river,DISASTER
+Landslide destroyed my farm,DISASTER
+Heavy rain submerged the village,DISASTER
+Flood relief needed urgently,DISASTER
+Rescue team needed for flood victims,DISASTER
+Ground floor completely underwater,DISASTER
+Mudslide blocked our only road,DISASTER
+River embankment breached flooding area,DISASTER
+Cyclone winds blew off roof tiles,DISASTER
+Tsunami wave warning issued,DISASTER
+Earthquake tremors caused wall cracks,DISASTER
+Forest fire threatening nearby houses,DISASTER
+Drought destroying all crops,DISASTER
+Heat wave killed livestock,DISASTER
+Snow storm trapped hikers,DISASTER
+Dam overflow warning issued,DISASTER
+Flash flood washed away bridge,DISASTER
+Land subsidence reported in mining area,DISASTER
+Cloud burst caused massive destruction,DISASTER
+Storm surge hit coastal village,DISASTER
+Hailstorm damaged car windshields,DISASTER
+Volcano eruption evacuation starting,DISASTER
+Lightning struck huge tree fire started,DISASTER
+Sandstorm visibility zero driving impossible,DISASTER
+Avalanche buryied ski resort,DISASTER
+River flooding main market area,DISASTER
+Ground sinking near river bank,DISASTER
+Bridge swept away by strong current,DISASTER
+Dam gates opened flooding downstream,DISASTER
+Pot hole on main street caused accident,ROAD
+Traffic signal not working at busy junction,ROAD
+Street light broken dark area unsafe,ROAD
+Road blocked due to fallen tree,ROAD
+Bus service irregular in morning hours,ROAD
+Bridge collapsed on highway,ROAD
+Speed bump required near school,ROAD
+Zebra crossing faded dangerous for pedestrians,ROAD
+Illegal parking causing traffic jam,ROAD
+Public transport bus breakdown frequently,ROAD
+Road construction material dumped on road,ROAD
+Manhole cover missing on footpath,ROAD
+Water logging on road after rain,ROAD
+Street sign missing drivers confused,ROAD
+Pavement broken difficult to walk,ROAD
+Traffic congestion due to narrow road,ROAD
+Traffic lights malfunctioning at major intersection,ROAD
+Huge crater on highway causing accidents,ROAD
+Street signs missing confused drivers,ROAD
+Road divider broken dangerous for vehicles,ROAD
+Illegal speed bump constructed by residents,ROAD
+Parking on footpath blocking pedestrians,ROAD
+Bus shelter collapsed due to wind,ROAD
+No street lights on highway dark stretch,ROAD
+Traffic jam due to narrow bridge,ROAD
+School zone sign missing speeding cars,ROAD
+Pedestrian crossing faded unsafe,ROAD
+Cycle track encroached by vendors,ROAD
+Road surface uneven bumpy ride,ROAD
+Water logging underpass after rain,ROAD
+Oil spill on road slippery surface,ROAD
+Construction debris dumped on road side,ROAD
+Cattle roaming on busy street causing traffic,ROAD
+Open manhole danger to bikers,ROAD
+Traffic signal timer not working properly,ROAD
+Road markings faded lane confusion,ROAD
+Auto rickshaws blocking bus stop,ROAD
+Overloaded trucks damaging road,ROAD
+Narrow road needs widening,ROAD
+Footpath broken tiles missing,ROAD
+Drainage water overflowing on road,ROAD
+Homeless people sleeping on pavement need shelter,SOCIAL
+Food distribution required for slum area,SOCIAL
+Senior citizen pension not received,SOCIAL
+Child labor observed in local factory,SOCIAL
+Lack of clean drinking water in village,SOCIAL
+Garbage not collected for days foul smell,SOCIAL
+Public toilet not clean and hygienic,SOCIAL
+Stray dogs attacking children in colony,SOCIAL
+Mosquito breeding spots increasing dengue risk,SOCIAL
+School building in dilapidated condition,SOCIAL
+Health center missing basic medicines,SOCIAL
+Electricity theft observed in neighborhood,SOCIAL
+Noise pollution from loudspeaker late night,SOCIAL
+Begging children at traffic signal,SOCIAL
+Homeless person needs medical help,SOCIAL
+Slum area needs sanitation facilities,SOCIAL
+Women safety issue in dark alley,SOCIAL
+Drug abuse reported in park,SOCIAL
+Old age home needs funding support,SOCIAL
+Orphanage lacks basic facilities,SOCIAL
+Begging mafia forcing children to beg,SOCIAL
+Domestic violence case reported,SOCIAL
+Child marriage happening in village,SOCIAL
+Dowry harassment complaint,SOCIAL
+Women feeling unsafe at night bus stop,SOCIAL
+Drug peddling near school,SOCIAL
+Alcohol shop causing nuisance in residential area,SOCIAL
+Gambling den operating illegally,SOCIAL
+Human trafficking suspicion,SOCIAL
+Labor exploitation in construction site,SOCIAL
+Minimum wage not paid to workers,SOCIAL
+Sanitation workers without safety gear,SOCIAL
+Scavenging manually practiced,SOCIAL
+Public park used for illegal activities,SOCIAL
+Playground equipment broken dangerous for kids,SOCIAL
+Library closed since months,SOCIAL
+Community hall in bad condition,SOCIAL
+Street dogs biting pedestrians,SOCIAL
+Monkey menace in residential colony,SOCIAL
+Pig farm causing foul smell,SOCIAL
+Dead animal lying on road not removed,SOCIAL
+Mosquito fogging not done regularly,SOCIAL
+Drains clogged with plastic waste,SOCIAL
+A thief stole my wallet,SOCIAL
+Robbery reported in the neighborhood,SOCIAL
+My house was burglarized,SOCIAL
+Stolen vehicle found abandoned,SOCIAL
+Chain snatching incident near the park,SOCIAL
+Thief caught by locals,SOCIAL
+Shoplifting reported at the mall,SOCIAL
