@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center py-16 px-4 relative">
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full opacity-15 blur-3xl" style="background: radial-gradient(circle, #238636, transparent);"></div>
+    </div>
+    <div class="w-full max-w-lg text-center z-10 animate-fade-in">
+        <!-- Animated Check -->
+        <div class="inline-flex items-center justify-center w-24 h-24 rounded-full mb-8" style="background: rgba(35,134,54,0.1); border: 2px solid rgba(35,134,54,0.3);">
+            <svg class="w-12 h-12 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+        </div>
+        <h1 class="text-4xl font-black text-white mb-4">Report Submitted!</h1>
+        <p class="text-slate-400 text-lg mb-2">Your complaint has been received.</p>
+        <p class="text-slate-500 mb-10">Our AI is analyzing the issue right now and will route it to the correct department automatically.</p>
+
+        <!-- Status card -->
+        <div class="glass rounded-3xl p-6 mb-10 text-left" style="border: 1px solid rgba(35,134,54,0.2);">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
+                <span class="text-emerald-400 text-sm font-bold uppercase tracking-widest">Processing</span>
+            </div>
+            <p class="text-slate-400 text-sm">The AI engine is classifying your complaint and selecting the appropriate department for routing.</p>
+        </div>
+
+        <div class="flex flex-wrap gap-4 justify-center">
+            <a href="{% url 'submit_complaint' %}" class="px-8 py-4 rounded-2xl font-bold text-slate-300 hover:text-white transition" style="border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);">
+                Submit Another
+            </a>
+            {% if user.is_authenticated %}
+            <a href="{% url 'citizen_dashboard' %}" class="px-8 py-4 rounded-2xl font-bold text-white transition transform hover:scale-105 active:scale-95" style="background: linear-gradient(135deg, #4f8ef7, #7c5df7); box-shadow: 0 8px 32px rgba(79,142,247,0.3);">
+                Track My Reports →
+            </a>
+            {% else %}
+            <a href="{% url 'home' %}" class="px-8 py-4 rounded-2xl font-bold text-white transition transform hover:scale-105 active:scale-95" style="background: linear-gradient(135deg, #4f8ef7, #7c5df7); box-shadow: 0 8px 32px rgba(79,142,247,0.3);">
+                Back to Home
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
